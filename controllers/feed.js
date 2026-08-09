@@ -25,19 +25,29 @@ exports.createPost = (req, res, next) => {
     const title = req.body.title
     const content = req.body.content
 
-    // Create post in db
-    res.status(201).json({
-        message: 'Post created successfully',
-        post: {
-          _id: new Date().toISOString(), 
-          title: title, 
-          content: content,
-          creator: {
-            name: 'Eleonora'
-          },
-          createdAt: new Date()
-        }
+    const post = new Post({
+      title: title,
+      content: content,
+      imageUrl: 'images/flower.jpg',
+      creator: {
+        name: 'Eleonora'
+      }
     })
+
+    post
+      .save()
+      .then(result => {
+        console.log('post result: ', result)
+
+        res.status(201).json({
+          message: 'Post created successfully',
+          post: result
+        })
+
+      })
+      .catch(err => console.error('post err: ', err))
+
+    
 
 }
 
