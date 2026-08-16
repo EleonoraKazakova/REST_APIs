@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const feedRoutes = require('./routes/feed')
 const app = express() 
+globalThis.crypto ??= require("node:crypto").webcrypto
 //const MONGODB_URI = 'mongodb+srv://eleonorakazakova89_db_user:dSJtbmD77k57I1K8@cluster0.wangstz.mongodb.net/shop?appName=Cluster0'
 const MONGODB_URI = 'mongodb+srv://eleonorakazakova89_db_user:dSJtbmD77k57I1K8@cluster0.wangstz.mongodb.net/messages?appName=Cluster0'
 
@@ -21,7 +22,7 @@ app.use('/feed', feedRoutes)
 mongoose
   .connect(MONGODB_URI)
   .then(result => app.listen(8080))
-  .catch(err => console.error('', err))
+  .catch(err => console.error('error mongoose: ', err))
 
 
 /*
