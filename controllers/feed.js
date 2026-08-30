@@ -5,7 +5,7 @@ const Post = require('../models/post');
 exports.getPosts = (req, res, next) => {
   Post.find()
       .then(posts => {
-        res.tatus(200).json({message: 'Fetched Posts successfully.', posts: posts})
+        res.status(200).json({message: 'Fetched Posts successfully.', posts: posts})
       })
       .catch(err => {
         if (!err.statusCode) {
