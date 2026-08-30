@@ -20,7 +20,13 @@ exports.getPosts = (req, res, next) => {
 exports.createPost = (req, res, next) => {
     const errors = check(req)
     if (!errors.isEmpty()) {
-      return res.status(422).json({message: 'Validation failed!', errors: errors.array()})
+      const error = new Error('Validation failed!')
+      error.statusCode = 422
+      throw error
+      /*return res.status(422).json({
+        message: 'Validation failed!', 
+        errors: errors.array()
+      })*/
     }
 
     console.log('req: ', req.body)
@@ -46,7 +52,13 @@ exports.createPost = (req, res, next) => {
         })
 
       })
-      .catch(err => console.error('post err: ', err))
+      .catch(err => {
+        if (!err.statusCode) {
+          console.error('post err: ', err)
+          err.statusCode = 500
+        }
+        next(err)
+      })
 
     
 
