@@ -3,7 +3,18 @@ const { check }  = require('express-validator')
 const Post = require('../models/post');
 
 exports.getPosts = (req, res, next) => {
-    res.status(200).json({posts: [
+  Post.find()
+      .then(posts => {
+        res.tatus(200).json({message: 'Fetched Posts successfully.', posts: posts})
+      })
+      .catch(err => {
+        if (!err.statusCode) {
+          console.error('get posts err: ', err)
+          err.statusCode = 500
+        }
+        next(err)
+      })
+    /*res.status(200).json({posts: [
       {
         _id: '1',
         title: 'First Post', 
@@ -14,7 +25,7 @@ exports.getPosts = (req, res, next) => {
         },
         createdAt: new Date()
       }
-    ]})
+    ]})*/
 }
 
 exports.createPost = (req, res, next) => {
@@ -54,14 +65,32 @@ exports.createPost = (req, res, next) => {
       })
       .catch(err => {
         if (!err.statusCode) {
-          console.error('post err: ', err)
+          console.error('post save err: ', err)
           err.statusCode = 500
         }
         next(err)
       })
 
-    
+}
 
+exports.getPost = (req, res, next) => {
+  const postId = req.params.postId 
+  Post.findById(postId)
+      .then(post => {
+        if (!post) {
+          const error = new Error('Could not find post.')
+          error.status = 400
+          throw error
+        }
+        res.status(200).json({message: 'Post fetched.', post: post})
+      })
+      .catch(err => {
+        if (!err.statusCode) {
+          console.error('getPost err: ', err)
+          err.statusCode = 500
+        }
+        next(err)
+      })
 }
 
 /* 
