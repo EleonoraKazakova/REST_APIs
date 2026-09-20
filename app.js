@@ -3,6 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const feedRoutes = require('./routes/feed')
+const authRoutes = require('./routes/auth')
 const app = express() 
 globalThis.crypto ??= require("node:crypto").webcrypto
 //const MONGODB_URI = 'mongodb+srv://eleonorakazakova89_db_user:dSJtbmD77k57I1K8@cluster0.wangstz.mongodb.net/shop?appName=Cluster0'
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/feed', feedRoutes)
+app.use('/auth', authRoutes)
 
 app.use((error, req, res, next) => {
   console.log('error_app: ', error)
